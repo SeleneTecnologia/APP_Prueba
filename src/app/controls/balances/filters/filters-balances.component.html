@@ -1,0 +1,53 @@
+<div class="accordion" id="accordionFilters">
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="headingFilters">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFilters" aria-expanded="false" aria-controls="collapseFilters">
+        <strong>Filtros</strong>
+      </button>
+    </h2>
+    <div id="collapseFilters" class="accordion-collapse collapse show" aria-labelledby="headingFilters" data-bs-parent="#accordionFilters">
+      <div class="accordion-body">
+        <div class="row my-4">
+          <div class="col-lg-3 col-md-12">
+            <label>Nombre</label>
+            <input type="text" [(ngModel)]="name" class="form-control">
+          </div>
+          <div class="col-lg-3 col-md-12">
+            <label>Desde</label>
+            <input type="date" onkeydown="return false" [(ngModel)]="fromDate" class="form-control">
+          </div>
+          <div class="col-lg-3 col-md-12">
+            <label>Hasta</label>
+            <input type="date" onkeydown="return false" [(ngModel)]="toDate" class="form-control">
+          </div>
+          <div class="col-lg-3 col-md-12">
+            <label>Estado</label>
+            <select [(ngModel)]="processStatusId" class="form-control">
+              <option value="">-- Seleccionar Estado --</option>
+              <option *ngFor="let status of processStatuses" [value]="status.id">{{ status.description }}</option>
+            </select>
+          </div>
+
+          <!-- Mostrar el mensaje de error -->
+          <div *ngIf="errorMessage" class="col-12">
+            <div class="alert alert-danger mt-3">{{ errorMessage }}</div>
+          </div>
+
+          <div class="col-lg-12 col-md-12 mb-2">
+            <div class="d-flex justify-content-end gap-2 mt-4">
+              <!-- Botón Buscar -->
+              <button class="btn btn-primary" (click)="applyFilters()">
+                <i class="bi bi-search me-1"></i>Buscar
+              </button>
+
+              <!-- Botón Limpiar -->
+              <button class="btn btn-secondary" (click)="clearFilters()">
+                <i class="bi bi-x-circle me-1"></i>Limpiar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

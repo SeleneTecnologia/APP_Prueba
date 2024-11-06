@@ -1,0 +1,23 @@
+<div class="text-end">
+  <button type="button" class="btn btn-primary" (click)="openModal()">
+    <i [ngClass]="getIconClass()"></i> {{ label }}
+  </button>
+</div>
+
+<p-dialog [(visible)]="isModalOpen" [modal]="true" [closable]="false" header="Subir Archivo" [style]="{width: '50vw'}">
+  <div class="mb-3">
+    <label for="fileUpload" class="form-label"><strong>{{ selectedFile ? selectedFile.name : 'Selecciona un archivo'
+        }}</strong></label>
+    <input type="file" id="fileUpload" class="form-control" (change)="onFileSelected($event)"
+      [accept]="getAcceptedFileTypes()" hidden />
+    <div>
+      <button class="btn btn-secondary" (click)="triggerFileInput()">Seleccionar Archivo</button>
+    </div>
+  </div>
+
+  <div class="text-end">
+    <button type="button" class="btn btn-secondary me-2" (click)="closeModal()">Cancelar</button>
+    <button type="button" class="btn btn-primary" [disabled]="isConfirmDisabled()"
+      (click)="confirmUpload()">Confirmar</button>
+  </div>
+</p-dialog>

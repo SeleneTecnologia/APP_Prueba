@@ -1,0 +1,22 @@
+<div class="side-menu" [class.collapsed]="isCollapsed">
+    <ul class="nav flex-column" style="margin-top: 25px;">
+        <li class="nav-item item" style="display: flex" (click)="showOption('desconexiones')">
+            <a [ngClass]="router.url.includes('/sesion/desconexiones') ? 'nav-link nav-item-selected' : 'nav-link nav-item'"
+               role="button">
+                <i class="bi bi-inboxes-fill"></i> <span class="header-text"> Desconexiones</span>
+            </a>
+        </li>
+        <li class="nav-item item" style="display: flex" (click)="showOption('balances')">
+            <a [ngClass]="router.url.includes('/sesion/balances') ? 'nav-link nav-item-selected' : 'nav-link nav-item'"
+               role="button">
+                <i class="bi bi-database-fill"></i> <span> Balances</span>
+            </a>
+        </li>
+        <li class="nav-item item" style="display: flex" (click)="showOption('fuerzas_mayores')">
+            <a [ngClass]="router.url.includes('/sesion/fuerzas_mayores') ? 'nav-link nav-item-selected' : 'nav-link nav-item'"
+               role="button">
+                <i class="bi bi-envelope-fill"></i><span> Fuerzas Mayores</span>
+            </a>
+        </li>
+    </ul>
+</div>

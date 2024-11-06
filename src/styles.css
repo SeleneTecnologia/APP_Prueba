@@ -1,0 +1,179 @@
+@import "bootstrap/dist/css/bootstrap.min.css";
+@import "bootstrap-icons/font/bootstrap-icons.css";
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap');
+@import "primeng/resources/themes/bootstrap4-light-blue/theme.css";
+@import "primeng/resources/primeng.css";
+
+body {
+
+
+  font-family: 'Open Sans', sans-serif;
+  background-color: #FFFFFF;
+  color: #000000;
+}
+
+:root {
+  --background-primary: #f6f9ff;
+  --background-secondary: #46474F;
+}
+
+body {
+  background-color: var(--background-primary);
+}
+
+.secondary-bg {
+  background-color: var(--background-secondary);
+}
+
+
+.btn-primary {
+  color: #fff;
+  background-color: #006B99;
+  border-color: #006B99;
+}
+
+.btn-primary:hover {
+  color: #fff;
+  background-color: #005886;
+  border-color: #005886;
+}
+
+.btn-primary:disabled,
+.btn-primary:disabled:hover {
+  color: #e0eaf0;
+  background-color: #4D97B8;
+  border-color: #4D97B8;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.icon-blue {
+  color: #006B99;
+  cursor: pointer;
+  font-size: 1.5rem;
+}
+
+.icon-blue:hover {
+  color: #004F73;
+}
+.icon-red {
+  color: #F04823;
+  cursor: pointer;
+  font-size: 1.5rem;
+}
+
+.icon-yellow {
+  color: #ffc107;
+  cursor: pointer;
+  font-size: 1.5rem;
+}
+
+.icon-success {
+  color: green;
+  cursor: pointer;
+  font-size: 1.5rem;
+}
+
+.icon-red:hover {
+  color: #C03A1B;
+}
+
+.icon-black {
+  color: #252730;
+  cursor: pointer;
+  font-size: 1.5rem;
+}
+
+.icon-black:hover {
+  color: #1A1C22;
+}
+
+.p-datatable .p-datatable-thead>tr>th {
+  background-color: #f8f9fa;
+  border-bottom: 3px solid #dee2e6;
+}
+
+.p-datatable .p-datatable-tbody>tr>td {
+  border-top: none;
+  height: 50px;
+}
+
+.p-paginator {
+  background: #ffffff;
+  color: #006B99;
+  border: solid #dee2e6;
+  border-width: 0;
+  padding: 0.75rem;
+  border-radius: 4px;
+}
+.p-paginator .p-paginator-first,
+.p-paginator .p-paginator-prev,
+.p-paginator .p-paginator-next,
+.p-paginator .p-paginator-last {
+  background-color: #ffffff;
+  border: 1px solid #dee2e6;
+  color: #006B99;
+  min-width: 2.357rem;
+  height: 2.357rem;
+  margin: 0 0 0 -1px;
+  transition: box-shadow 0.15s;
+  border-radius: 0;
+}
+.p-paginator .p-paginator-first:not(.p-disabled):not(.p-highlight):hover,
+.p-paginator .p-paginator-prev:not(.p-disabled):not(.p-highlight):hover,
+.p-paginator .p-paginator-next:not(.p-disabled):not(.p-highlight):hover,
+.p-paginator .p-paginator-last:not(.p-disabled):not(.p-highlight):hover {
+    background: #e9ecef;
+    border-color: #dee2e6;
+    color: #006B99;
+  }
+  .p-paginator .p-paginator-current {
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    color: #006B99;
+    min-width: 2.357rem;
+    height: 2.357rem;
+    margin: 0 0 0 -1px;
+    padding: 0 0.5rem;
+  }
+  .p-paginator .p-paginator-pages .p-paginator-page {
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    color: #006B99;
+    min-width: 2.357rem;
+    height: 2.357rem;
+    margin: 0 0 0 -1px;
+    transition: box-shadow 0.15s;
+    border-radius: 0;
+  }
+  .p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
+    background: #006B99;
+    border-color: #006B99;
+    color: #ffffff;
+  }
+  .p-paginator .p-paginator-pages .p-paginator-page:not(.p-highlight):hover {
+    background: #e9ecef;
+    border-color: #dee2e6;
+    color: #006B99;
+  }
+
+  .p-dropdown-panel .p-dropdown-items .p-dropdown-item.p-highlight {
+    color: #ffffff;
+    background: #006B99;
+  }
+
+  .button-border {
+    border: 1px solid #ffffff;
+  }
+
+.badge {
+  min-width: 100px;
+  max-width: 100px;
+  text-align: center;
+  padding: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+  padding: 5px 6px;
+}

@@ -1,0 +1,36 @@
+.session-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  /* Altura completa de la ventana */
+}
+
+.main-content {
+  display: flex;
+  flex: 1;
+}
+
+.side-menu {
+  width: 250px;
+  transition: width 0.1s ease;
+}
+
+.side-menu.collapsed {
+  width: 60px;
+}
+
+.content_area {
+  margin-top: 60px;
+  flex: 1;
+  padding: 20px 30px;
+  transition: margin-left 0.1s ease;
+  overflow-x: auto;
+}
+
+.content_area.collapsed {
+  margin-left: 60px;
+}
+
+.content_area:not(.collapsed) {
+  margin-left: 250px;
+}

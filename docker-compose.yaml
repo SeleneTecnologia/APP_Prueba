@@ -1,0 +1,16 @@
+services:
+  frontend:
+    container_name: frontend
+    # command: 
+    #   - nginx
+    #   - -g
+    #   - daemon off;
+    build:
+      context: .
+    env_file:
+      - .env
+    volumes:
+    - ./src/app:/usr/src/app
+    - ./config/nginx.conf:/etc/nginx/conf.d/default.conf
+    ports:
+    - 8081:8080

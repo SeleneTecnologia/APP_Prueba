@@ -1,0 +1,169 @@
+.card {
+  margin-bottom: 30px;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0px 0 30px rgba(1, 41, 112, 0.1);
+}
+
+
+/* Asegurarse de que el botón acordeón no se sobrescriba */
+.accordion-button {
+  border: none;
+}
+
+/* Quitar el color celeste de la cabecera cuando el acordeón está abierto */
+.accordion-button:not(.collapsed) {
+  background-color: transparent !important;
+  color: inherit;
+  border-color: transparent;
+}
+
+/* Mantener la cabecera del acordeón con estilo neutro también cuando está cerrado */
+.accordion-button {
+  background-color: transparent;
+  color: inherit;
+  border: none;
+  box-shadow: none;
+}
+
+.is-success {
+  border-color: #198754;
+}
+
+.is-success:focus {
+  box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.25);
+  /* Sombra verde */
+}
+
+/* Estilo para is-invalid (validación fallida) con fondo rojo claro */
+.is-danger {
+  border-color: #dc3545;
+}
+
+.is-danger:focus {
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+  /* Sombra roja */
+}
+
+/* Clase personalizada para is-warning con fondo amarillo claro */
+.is-warning {
+  border-color: #ffc107;
+}
+
+.is-warning:focus {
+  box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.25);
+  /* Sombra amarilla */
+}
+:host ::ng-deep .custom-table-info {
+  width: auto;  
+}
+
+:host ::ng-deep .custom-table-info tr th {
+  background-color: #006B99;
+  color: white;        
+  /*padding: 8px 20px 8px 20px;*/
+  padding: 5px;
+  vertical-align: top;
+}
+
+:host ::ng-deep .custom-table-info tr td {
+  border-spacing: 0;
+  padding: 0;
+  height: 2.857rem;
+}
+
+:host ::ng-deep .custom-table-info tr td:first-child {
+  padding-left: 20px;
+}
+
+.minimal-border {
+  border: 1px solid #ccc; 
+  border-radius: 5px;   
+  background-color: white;
+}
+
+.minimalist-box {  
+  border: 1px solid #f3eaeafa; 
+  border-radius: 5px;     
+  background-color: #f3eaeafa;
+}
+
+.background-white {
+  background-color: white;
+}
+
+.file-info {
+  width: 30%;
+}
+
+.validation-info {
+  width: 10%;
+  text-align: right;
+}
+
+.view-error-info {
+  width: 10%;
+  text-align: left;
+  padding-left: 10px !important;
+}
+
+.association-info {
+  width: 10%;
+  text-align: right;
+}
+
+.dx-info {
+  width: 10%;
+  text-align: right;
+}
+
+:host ::ng-deep .custom-table-errors {
+  width: auto; /* O ajusta a un porcentaje específico si lo prefieres */
+}
+
+:host ::ng-deep .custom-table-errors tr th {
+  border-spacing: 0;
+  padding: 0;
+  height: 2.157rem;
+  background-color: #46474F;
+  color: white;
+}
+
+:host ::ng-deep .custom-table-errors tr td {
+  border-spacing: 0;
+  padding: 0;
+  height: 2.157rem;
+}
+
+.icon-style {
+  font-size: 1.2rem;  
+}
+
+.triangle-consumption {
+  position: absolute;
+  top: 205px;
+  left: 23px;
+  width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-bottom: 15px solid #f3eaeafa; 
+  transform: translateY(-100%);
+}
+
+.triangle-additionInfo {    
+  position: absolute;
+  top: 133px; 
+  left: 23px; 
+  width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-bottom: 15px solid #f3eaeafa;
+  transform: translateY(-100%);
+}
+
+.background-minimalist {
+  background-color: #f3eaeafa; 
+  padding: 5px !important  
+}

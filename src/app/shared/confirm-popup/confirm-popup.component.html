@@ -1,0 +1,10 @@
+<!-- confirm-popup.component.html -->
+<p-dialog header="{{header}}" [(visible)]="display" modal="modal" [closable]="false">
+    <p>{{message}}</p>
+    <p-footer>
+        <button type="button" pButton label="{{rejectLabel}}" class="p-button-text" (click)="onReject()">
+      </button>
+        <button type="button" pButton label="{{acceptLabel}}" icon="pi pi-check" (click)="onAccept()">
+      </button>
+    </p-footer>
+</p-dialog>

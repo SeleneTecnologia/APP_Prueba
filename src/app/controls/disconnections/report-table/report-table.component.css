@@ -1,0 +1,10 @@
+/* Margen de la tabla a los lados */
+.table-container {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+/* Mantener la clase para el espaciado entre íconos */
+.icon-spacing {
+  margin-right: 10px;
+}

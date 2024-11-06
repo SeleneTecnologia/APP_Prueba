@@ -1,0 +1,29 @@
+<!-- inicio titulo y breadcrumb -->
+<app-page-title [title]="'Desconexiones'" [breadcrumb]="[
+    { label: 'Inicio', link: '/sesion/desconexiones', active: false },
+    { label: 'Desconexiones', active: true }
+  ]">
+</app-page-title>
+<!-- fin titulo y breadcrumb -->
+
+<!-- inicio card -->
+<div class="card">
+  <div class="card-body">
+    <!-- inicio subida archivos -->
+    <div class="row justify-content-end my-3">
+      <div class="col-lg-4 col-md-12">
+        <app-upload-file [label]="'Subir EAF Manual'" [type]="'EAF'"></app-upload-file>
+      </div>
+    </div>
+    <!-- fin subida archivos -->
+
+    <!-- inicio filtros -->
+    <app-filters></app-filters>
+    <!-- fin filtros -->
+  </div>
+
+
+<app-report-table [cols]="cols"/>
+
+</div>
+<!-- fin card -->

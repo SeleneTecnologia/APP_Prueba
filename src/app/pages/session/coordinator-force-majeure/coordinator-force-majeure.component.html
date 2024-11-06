@@ -1,0 +1,28 @@
+<!-- inicio titulo y breadcrumb -->
+<app-page-title [title]="'Fuerzas Mayores'" [breadcrumb]="[
+    { label: 'Inicio', link: '/sesion/fuerzas_mayores', active: false },
+    { label: 'Fuerzas Mayores', active: true }
+  ]">
+</app-page-title>
+<!-- fin titulo y breadcrumb -->
+<!-- inicio card -->
+<div class="card">
+    <div class="card-body">
+        <!-- inicio subida archivos -->
+        <div class="row justify-content-end my-3">
+            <div class="col-lg-4 col-md-12">
+                <app-upload-file [label]="'Subir Fuerza Mayor Manual'" [type]="'FUERZA_MAYOR'" (validateStateRequest)="validateState()" (onFileUpload)="uploadFileToS3($event)" (onModalOpen)="resetErrorState()">
+                </app-upload-file>
+            </div>
+        </div>
+        <!-- fin subida archivos -->
+    </div>
+</div>
+<app-filters-fm></app-filters-fm>
+
+<app-report-table-fm></app-report-table-fm>
+
+<!-- Añadir el componente p-toast -->
+<p-toast position="bottom-right" [life]="5000"></p-toast>
+<p-confirmDialog />
+<!-- fin card -->

@@ -1,0 +1,51 @@
+<!-- report-table-fm.component.html -->
+<div class="table-container">
+    <!-- Tabla -->
+    <div class="table-responsive">
+        <p-table [value]="forceMajeures" [paginator]="true" [rows]="rows" [first]="first" [showCurrentPageReport]="true" [tableStyle]="{ 'min-width': '50rem' }" [rowsPerPageOptions]="[5, 10, 20]" (onLazyLoad)="loadLazyData($event)" [lazy]="true" [totalRecords]="totalRecords"
+            [globalFilterFields]="['forceMajeures.name']" (onFilter)="filterData($event)" paginatorDropdownAppendTo="body" currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" message styleClass="p-datatable-striped">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>#</th>
+                    <th>Carta</th>
+                    <th>Último EAF</th>
+                    <th>Fecha de Carga</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-event let-i="rowIndex">
+                <tr>
+                    <td>{{ i + 1 }}</td>
+                    <td><strong>{{ event.name }}</strong></td>
+                    <td>{{ event.lastEaf }}</td>
+                    <td>{{ event.entryTimestamp | date: 'dd-MM-yyyy HH:mm' }}</td>
+                    <td>
+                        <span class="badge" role="button" [ngClass]='"bg-"+ event.processStatus.level' [attr.data-bs-toggle]="
+                            event.processStatus.description.length > 15 ? 'tooltip' : null
+                          " [attr.title]="event.loadStatus.description">
+                          {{ truncateText(event.processStatus.description) }}
+                        </span>
+                    </td>
+                    <td>
+                        <button type="button" class="bi bi-arrow-right-circle-fill icon-blue icon-spacing btn btn-link" title="Ver detalle/editar" (click)="editEvent(event)" data-bs-toggle="tooltip">
+                    </button>
+
+
+                        <!-- Componente de botón de eliminación -->
+                        <app-delete-button *ngIf="event.processStatus.id == 'NF01'" [id]="event.id" (deleted)="onDeleted($event)">
+                        </app-delete-button>
+
+                        <cen-download-file [downloadName]="event.name" [downloadPath]="event.filePath" downloadButton="blue" downloadExtension="pdf">
+                        </cen-download-file>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="6"><strong>No se encontraron registros</strong></td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>

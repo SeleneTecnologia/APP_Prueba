@@ -1,0 +1,82 @@
+<div class="table-container">
+  <!-- Tabla -->
+  <div class="table-responsive">
+    <p-table
+      [value]="balances"
+      [paginator]="true"
+      [rows]="rows"
+      [first]="first"
+      [showCurrentPageReport]="true"
+      [tableStyle]="{ 'min-width': '50rem' }"
+      [rowsPerPageOptions]="[5, 10, 20]"
+      (onLazyLoad)="loadLazyData($event)"
+      [lazy]="true"
+      [totalRecords]="totalRecords"
+      [globalFilterFields]="['balances.name']"
+      (onFilter)="filterData($event)"
+      paginatorDropdownAppendTo="body"
+      currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+      message
+      styleClass="p-datatable-striped"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th>#</th>
+          <th>Nombre</th>
+          <th>Fecha</th>
+          <th>Año</th>
+          <th>Mes</th>
+          <th>Estado Proceso</th>
+          <th>Acciones</th>
+        </tr>
+        
+      </ng-template>
+      <ng-template pTemplate="body" let-balances>
+        <tr>
+          <td>{{ balances.id }}</td>
+          <td><strong>{{ balances.name }}</strong></td>
+          <td>{{ balances.entryTimestamp }}</td>
+          <td><strong>{{ balances.year }}</strong></td>
+          <td><strong>{{ balances.month }}</strong></td>
+          <td>
+            <span class="badge" role="button" [ngClass]='"bg-"+ balances.processStatus.level' [attr.data-bs-toggle]="
+                balances.processStatus.description.length > 15 ? 'tooltip' : null
+              " [attr.title]="balances.loadStatus.description">
+              {{ truncateText(balances.processStatus.description) }}
+            </span>
+          </td>
+          <td>
+            <cen-download-file downloadTitle="Descargar documento" data-bs-toggle="tooltip"
+            [downloadName]="balances.name"                     
+            [downloadPath]="balances.filePath"
+                                downloadButton="blue"
+                                >
+            </cen-download-file>
+            <cen-download-file downloadTitle="Descargar Logs" data-bs-toggle="tooltip"
+            *ngIf="balances.processStatus.id == 'NF01'"
+                                [downloadName]="balances.name" 
+                                [downloadPath]="balances.logPath"
+                                downloadButton="red">
+            </cen-download-file>
+            
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td><strong>No se encontraron registros</strong></td>
+        </tr>
+      </ng-template>
+    </p-table>
+    <div class="card flex justify-content-center gap-2">
+      <app-confirm-popup
+        header="Confirmaci�n"
+        message="�Est� seguro que desea eliminar el registro?"
+        acceptLabel="&nbsp;S�&nbsp;"
+        rejectLabel="No"
+        [acceptMethod]="acceptDelete"
+        [rejectMethod]="rejectDelete"
+        #confirmPopup  />
+    </div>
+  </div>
+</div>

@@ -1,0 +1,11 @@
+<!-- delete-button.component.html -->
+<button type="button" pButton icon="pi pi-trash" class="p-button-rounded p-button-text p-mr-2 btn-delete-custom" (click)="showConfirm()" title="Eliminar" aria-label="Eliminar registro">
+</button>
+
+<p-dialog header="Confirmación" [(visible)]="displayConfirm" modal="modal" [closable]="false">
+    <p>¿Estás seguro que deseas eliminar este registro?</p>
+    <p-footer>
+        <button type="button" pButton label="No" icon="pi pi-times" class="p-button-text" (click)="cancelDelete()"></button>
+        <button type="button" pButton label="Sí" icon="pi pi-check" (click)="confirmDelete()"></button>
+    </p-footer>
+</p-dialog>

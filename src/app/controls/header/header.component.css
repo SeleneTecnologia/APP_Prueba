@@ -1,0 +1,68 @@
+  
+  .logo {
+    margin-left: 10px;
+    height: 35px; /* Ajusta el tamaño del logo */
+    cursor: pointer; /* Cambia el cursor al pasar sobre el logo */
+  }
+  
+  .user-icon {
+    cursor: pointer; /* Cambia el cursor al pasar sobre el icono de usuario */
+  }
+    
+
+  nav.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 2000;
+    background-color: #343a40; /* Color de fondo para el header */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra para darle profundidad */
+    padding: 10px 20px;
+  }
+
+  .main-content {
+    padding-top: 70px; /* Ajuste el espacio debajo del header para que el contenido no se superponga */
+  }
+  
+
+  .avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 1rem;
+  }
+
+  .navbar-title {
+    text-align: center;
+    color: white;
+  }
+
+/* Modo normal (escritorio o tablet) */
+.short-text {
+  display: none;
+}
+
+.username-text {
+  display: inline;
+}
+
+/* Modo móvil (cuando la pantalla es menor a 576px) */
+@media (max-width: 576px) {
+  .full-text {
+    display: none;
+  }
+
+  .short-text {
+    display: inline;
+  }
+
+  /* Ocultar el nombre del usuario en modo smartphone */
+  .username-text {
+    display: none;
+  }
+}

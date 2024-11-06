@@ -1,0 +1,132 @@
+.form-group {
+    position: relative;
+  }
+  
+  .form-group label {
+    position: absolute;
+    top: -0.75rem;
+    left: 0.75rem;
+    background: white;
+    padding: 0 0.3rem;
+  
+    color: #6c757d;
+  }
+  
+  .mt-n3 {
+    margin-top: -1rem;
+  }
+  
+  .is-success {
+    border-color: #198754;
+  }
+  
+  .is-success:focus {
+    box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.25);
+    /* Sombra verde */
+  }
+  
+  /* Estilo para is-invalid (validación fallida) con fondo rojo claro */
+  .is-danger {
+    border-color: #dc3545;
+  }
+  
+  .is-danger:focus {
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+    /* Sombra roja */
+  }
+  
+  /* Clase personalizada para is-warning con fondo amarillo claro */
+  .is-warning {
+
+    border-color: #ffc107 !important;
+
+  }
+  
+  .is-warning:focus {
+    box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.25);
+    /* Sombra amarilla */
+  }
+  
+
+  .ng-select {
+    display: block;
+    width: 100%;
+    height: calc(1.5em + 0.75rem + 2px);
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.ng-select.ng-select-focused .ng-select-container {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.ng-select .ng-select-container {
+    padding: 0;
+    border: none;
+}
+
+.ng-select .ng-clear-wrapper {
+    padding-right: 0.75rem;
+}
+
+.ng-select.ng-select-single .ng-select-container {
+    display: flex;
+    align-items: center;
+    height: calc(1.5em + 0.75rem + 2px);
+}
+
+.ng-select .ng-select-container .ng-value-container {
+    padding-left: 0.75rem;
+}
+
+.ng-select .ng-dropdown-panel {
+    border-radius: 0.25rem;
+    border: 1px solid #ced4da;
+}
+
+.form-label {
+  position: relative;
+  background-color: #ffffff;
+  padding: 0.2rem 0.5rem;
+  border-radius: 8px; /* Esto agregará los bordes redondeados */
+  color: #6c757d;
+  display: inline-block;
+  z-index: 1000;
+}
+
+.form-group {
+  position: relative;
+}
+
+.position-relative {
+  position: relative;
+}
+
+.reset-btn {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.reset-btn i {
+  font-size: 1.2rem;
+  color: #dc3545;
+}
+
+.reset-btn:focus {
+  outline: none;
+}

@@ -1,0 +1,37 @@
+<!-- inicio titulo y breadcrumb -->
+<app-page-title [title]="'Balances'" [breadcrumb]="[
+    { label: 'Inicio', link: '/sesion/balances', active: false },
+    { label: 'Balances', active: true }
+  ]">
+</app-page-title>
+<!-- fin titulo y breadcrumb -->
+
+<!-- inicio card -->
+<div class="card">
+  <div class="card-body">
+    <!-- inicio subida archivos -->
+    <div class="row justify-content-end my-3">
+      <div class="col-lg-4 col-md-12">
+        <!--app-upload-file [label]="'Subir DTE Manual'"  [type]="'DTE'"></app-upload-file-->
+        <app-upload-file [label]="'Subir DTE Manual'" [type]="'DTE'" (onFileUpload)="uploadFileToS3($event)"
+          (onModalOpen)="resetErrorState()">
+        </app-upload-file>
+      </div>
+    </div>
+    <!-- fin subida archivos -->
+
+    <!-- inicio filtros -->
+    <app-filters-balances></app-filters-balances>
+    <!-- fin filtros -->
+  </div>
+
+
+<app-balances-table [cols]="cols"/>
+
+</div>
+
+<!-- Añadir el componente p-toast -->
+<p-toast position="bottom-right" [life]="5000"></p-toast>
+<p-confirmDialog />
+
+<!-- fin card -->

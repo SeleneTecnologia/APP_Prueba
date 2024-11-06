@@ -1,0 +1,93 @@
+<div class="form-group position-relative">
+    <label [attr.for]="idInput" class="form-label ">
+        <span class="h6 small bg-white text-muted pt-1 pl-2 pr-2">{{ label }}</span>
+    </label>
+    <!-- Renderizar input o textarea según inputType -->
+    <ng-container [ngSwitch]="inputType">
+        <input *ngSwitchCase="'text'" [id]="idInput" type="text" class="form-control mt-n3" [ngClass]="getFieldClass()"
+            [disabled]="isDisabled()" [value]="field?.value ?? ''" [attr.title]="field?.validationDescription || ''"
+            (input)="onInputChange($event)" />
+
+        <input *ngSwitchCase="'number'" [id]="idInput" step="1" class="form-control mt-n3" [ngClass]="getFieldClass()"
+            [disabled]="isDisabled()" [value]="field?.value ?? ''" min="1" max="9999999"
+            (keydown)="blockNegativeInput($event)" [attr.title]="field?.validationDescription || ''"
+            (input)="onInputChange($event)" />
+
+        <input *ngSwitchCase="'decimal'" [id]="idInput" type="number" class="form-control mt-n3"
+            [ngClass]="getFieldClass()" [disabled]="isDisabled()" [value]="field?.value ?? ''" min="0" max="9999999"
+            step=".01" [attr.title]="field?.validationDescription || ''" (input)="onInputChange($event)" />
+
+        <input *ngSwitchCase="'date'" onkeydown="return false" [id]="idInput" type="date" class="form-control mt-n3"
+            [ngClass]="getFieldClass()" [disabled]="isDisabled()" [value]="field?.value ?? ''"
+            [attr.title]="field?.validationDescription || ''" (input)="onInputChange($event)" />
+
+        <input *ngSwitchCase="'datetime'" onkeydown="return false" [id]="idInput" type="datetime-local"
+            class="form-control mt-n3" [ngClass]="getFieldClass()" [disabled]="isDisabled()"  [min]="minDate"
+            [value]="field?.value ?? ''" [attr.title]="field?.validationDescription || ''" [max]="maxDate"
+            (input)="onInputChange($event)" />
+
+        <input *ngSwitchCase="'time'" step="60" min="00:00" max="23:59" onkeydown="return false" [id]="idInput"
+            type="time" class="form-control mt-n3" [ngClass]="getFieldClass()" [disabled]="isDisabled()"
+            [value]="field?.value ?? ''" [attr.title]="field?.validationDescription || ''"
+            (input)="onInputChange($event)" />
+
+        <textarea *ngSwitchCase="'textarea'" [id]="idInput" class="form-control mt-n3" [ngClass]="getFieldClass()"
+            [disabled]="isDisabled()" [value]="field?.value ?? ''" (input)="onInputChange($event)"
+            [attr.title]="field?.validationDescription || ''" rows="8"></textarea>
+
+        <input *ngSwitchCase="'checkbox'" [id]="idInput" type="checkbox" class="form-check-input"
+            style="margin-left: 150px; margin-top: -7px;" [ngClass]="getFieldClass()"
+            [attr.title]="field?.validationDescription || ''" [disabled]="isDisabled()" [value]="field?.value ?? ''"
+            (input)="onInputChange($event)">
+
+        <div *ngSwitchCase="'select'">
+            <select [id]="idInput" class="form-control mt-n3" [ngClass]="getFieldClass()" [disabled]="isDisabled()"
+                autocomplete="off" (change)="onInputChange($event)" [value]="field?.value?.id ?? ''">
+                <option *ngIf="field?.errorLevel != 'success'">Seleccione... </option>
+                <option *ngFor="let option of values" [value]="option.id">{{ option.description }}</option>
+            </select>
+        </div>
+
+
+        <div class="position-relative" *ngSwitchCase="'autocompleteElement'">
+            <input [id]="idInput" type="text" class="form-control mt-n3 pr-5" [ngClass]="getFieldClass()"
+                [value]="field?.value ?? ''" list="elements" (input)="onAutocompleteChange($event, 'nemotecnico')"
+                autocomplete="off" [disabled]="isDisabled()" [attr.title]="field?.validationDescription || ''">
+            <datalist id="elements" autocomplete="off">
+                <option *ngFor="let item of values" [value]="item.nemotecnico">{{ item.nemotecnico }}</option>
+            </datalist>
+            <button *ngIf="isSelectionMade" type="button" class="btn reset-btn" (click)="resetSelection()">
+                <i class="bi bi-x-circle"></i>
+            </button>
+        </div>
+
+        <div class="position-relative" *ngSwitchCase="'autocompleteCoordinated'">
+            <input type="text" class="form-control mt-n3" [ngClass]="getFieldClass()" [value]="field?.value ?? ''"
+                list="coordinated" [id]="idInput" (change)="onAutocompleteChange($event, 'legalName')"
+                [disabled]="isDisabled()" [attr.title]="field?.validationDescription || ''" autocomplete="off">
+            <datalist id="coordinated">
+                <option *ngFor="let item of values" [value]="item.legalName">{{ item.legalName }}</option>
+            </datalist>
+            <button *ngIf="isSelectionMade && this.field?.errorLevel !== 'success'" type="button" class="btn reset-btn"
+                (click)="resetSelection()">
+                <i class="bi bi-x-circle"></i>
+            </button>
+        </div>
+
+        <!-- MultiSelect de PrimeNG con autocomplete -->
+        <p-multiSelect *ngSwitchCase="'multiselect'" [options]="values" [(ngModel)]="selectedValues" optionLabel="name"
+            placeholder="Selecciona valores" display="chip" appendTo="body" [id]="idInput" [className]="'is-warning'"
+            (onChange)="onchangeMultiSelect()" [attr.title]="field?.validationDescription || ''">
+        </p-multiSelect>
+
+
+    </ng-container>
+
+    <div *ngIf="shouldShowError()" class="form-text" [ngClass]="{
+          'text-danger': field?.errorLevel === 'danger',
+          'text-warning': field?.errorLevel === 'warning'
+        }">
+        <i [ngClass]="getIconClass()"></i>
+        {{ field?.errorDescription }}
+    </div>
+</div>

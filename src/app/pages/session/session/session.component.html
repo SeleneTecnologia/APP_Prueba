@@ -1,0 +1,11 @@
+<div class="session-layout">
+    <app-header (toggleMenu)="toggleMenu()"></app-header>
+    
+    <div class="main-content">
+      <app-side-menu [isCollapsed]="isMenuCollapsed"></app-side-menu>
+      
+      <div class="content_area" [class.collapsed]="isMenuCollapsed">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </div>

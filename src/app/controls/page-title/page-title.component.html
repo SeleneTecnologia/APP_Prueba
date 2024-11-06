@@ -1,0 +1,12 @@
+<div class="pagetitle">
+    <h1>{{ title }}</h1>
+    <nav *ngIf="breadcrumb">
+      <ol class="breadcrumb">
+        <li *ngFor="let item of breadcrumb" class="breadcrumb-item" [class.active]="item.active">
+          <a *ngIf="!item.active" [routerLink]="item.link">{{ item.label }}</a>
+          <span *ngIf="item.active">{{ item.label }}</span>
+        </li>
+      </ol>
+    </nav>
+  </div>
+  

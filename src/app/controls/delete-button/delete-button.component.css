@@ -1,0 +1,59 @@
+/* delete-button.component.css */
+
+:host ::ng-deep .p-dialog .p-button {
+    margin: 0.25rem;
+}
+
+
+/* delete-button.component.css */
+
+
+/* Clase personalizada para el botón de eliminación */
+
+.btn-delete-custom {
+    /* Definir color del icono */
+    color: #FF5722;
+    /* Rojo-anaranjado elegante */
+    /* Tamaño del icono */
+    font-size: 1.25rem;
+    /* Añadir transición para efectos suaves */
+    transition: color 0.3s ease, transform 0.2s ease;
+    /* Ajustar el padding y la alineación */
+    padding: 0.3rem 0.5rem;
+    /* Ajustar el padding para mantener el tamaño */
+    vertical-align: middle;
+    /* Centrar verticalmente */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    /* Opcional: Ajustar el cursor */
+    cursor: pointer;
+}
+
+
+/* Efecto hover: oscurecer el icono */
+
+.btn-delete-custom:hover {
+    color: #E64A19;
+    /* Tono más oscuro de rojo-anaranjado */
+    transform: scale(1.1);
+    /* Aumentar ligeramente el tamaño */
+}
+
+
+/* Efecto active: aún más oscuro y reducir el tamaño momentáneamente */
+
+.btn-delete-custom:active {
+    color: #D84315;
+    /* Tono aún más oscuro */
+    transform: scale(0.95);
+    /* Reducir ligeramente el tamaño */
+}
+
+
+/* Opcional: Quitar el outline al enfocarse para evitar el resaltado predeterminado */
+
+.btn-delete-custom:focus {
+    outline: none;
+    box-shadow: none;
+}

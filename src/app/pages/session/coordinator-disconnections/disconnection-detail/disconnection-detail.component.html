@@ -1,0 +1,765 @@
+<app-page-title [title]="'Desconexiones'" [breadcrumb]="[
+    { label: 'Inicio', link: '/sesion/desconexiones' , active: false },
+    { label: 'Desconexiones', link: '/sesion/desconexiones' , active: false },
+    { label:  eafDetailDto.eafDTO?.name || '', active: true }
+  ]">
+</app-page-title>
+
+<!-- inicio card -->
+<div class="card">
+    <div class="card-body">
+        <div class="container mt-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3><strong>{{eafDetailDto.eafDTO?.name}}</strong></h3>
+                <button class="btn btn-primary" data-bs-toggle="tooltip" title="Descargar archivo">
+                    <i class="bi bi-download"></i>
+                </button>
+            </div>
+
+            <div class="row mb-4 ">
+                <div class="col-md-4">
+                    <label class="form-label">Nombre del Archivo</label>
+                    <p class="form-control-plaintext" id="fileName"><strong>{{eafDetailDto.eafDTO?.name}}</strong></p>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Fecha de Carga</label>
+                    <p class="form-control-plaintext" id="uploadDate"><strong>{{eafDetailDto.eafDTO?.entryTimestamp |
+                            date: 'dd-MM-yyyy HH:mm'}}</strong></p>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Estado Actual</label>
+                    <p class="form-control-plaintext" id="status">
+                        <span class="badge" role="button" [ngClass]='"bg-"+ eafDetailDto.eafDTO?.processStatus?.level'>
+                            {{ eafDetailDto.eafDTO?.processStatus?.description }}
+                        </span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Cabecera -->
+            <div class="accordion mb-3" id="formAccordion">
+                <div class="accordion-item" [ngClass]="'is-' + getSectionStatus('HEADER').validationType.level">
+                    <h2 class="accordion-header" id="headingCabecera" data-bs-toggle="tooltip"
+                        [title]="getSectionStatus('HEADER').validationType.description">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseCabecera" aria-expanded="true" aria-controls="collapseCabecera">
+                            <strong>Cabecera</strong>
+                        </button>
+                    </h2>
+                    <div id="collapseCabecera" class="accordion-collapse collapse show mt-4"
+                        aria-labelledby="headingCabecera">
+                        <div class="accordion-body">
+                            <div class="row mb-4">
+                                <div class="col-md-4 mb-3">
+                                    <app-validated-text-input [label]="'Fecha Desconexión'" [input]="'startDate'"
+                                        [field]="eafDetailDto.header?.startDate" [inputType]="'date'"
+                                        (valueChanged)="onFieldValueChanged('header','startDate', $event)"></app-validated-text-input>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <app-validated-text-input [label]="'Hora Desconexión'"
+                                        [field]="eafDetailDto.header?.startTime" [inputType]="'time'"
+                                        [input]="'startTime'"
+                                        (valueChanged)="onFieldValueChanged('header','startTime', $event)"></app-validated-text-input>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <div class="form-group">
+                                        <app-validated-text-input [label]="'Segmento'" [input]="'segmentType'"
+                                            [field]="eafDetailDto.header?.segmentType" [inputType]="'select'"
+                                            [values]="segmentTypes"
+                                            (valueChanged)="onFieldValueChanged('header','segmentType', $event)"></app-validated-text-input>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                @if(eafDetailDto.header?.failedElementId?.errorLevel == 'success'){
+                                <div class="col-md-8 mb-3">
+                                    <app-validated-text-input [label]="'Nemotécnico Elemento Fallado'"
+                                        [input]="'failedElementNemotechnic'"
+                                        [field]="eafDetailDto.header?.failedElementNemotechnic" [inputType]="'text'"
+                                        (valueChanged)="onFieldValueChanged('header','failedElementNemotechnic', $event)"></app-validated-text-input>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <app-validated-text-input [label]="'ID Elemento Fallado'" [inputType]="'text'"
+                                        [input]="'failedElementId'" [field]="eafDetailDto.header?.failedElementId"
+                                        [isDefaultDisabled]="true"></app-validated-text-input>
+                                </div>
+                                } @else {
+                                <div class="col-md-4 mb-3">
+                                    <app-validated-text-input [label]="'Tipo de Elemento'" [inputType]="'select'"
+                                        [input]="'elementType'" [values]="installationTypes"
+                                        (valueChanged)="onElementTypeSelected($event)">
+                                    </app-validated-text-input>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <app-validated-text-input [label]="'Nemotécnico Elemento Fallado'"
+                                        [inputType]="'autocompleteElement'" [values]="filteredOptions"
+                                        [input]="'failedElementNemotechnic'"
+                                        [field]="eafDetailDto.header?.failedElementNemotechnic"
+                                        [isDefaultDisabled]="!selectedElementType"
+                                        (valueChanged)="onNemotechnicSelected('failedElementNemotechnic', $event)"></app-validated-text-input>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <app-validated-text-input [label]="'ID Elemento'" [inputType]="'text'"
+                                        [input]="'failedElementId'" [field]="eafDetailDto.header?.failedElementId"
+                                        [isDefaultDisabled]="true"></app-validated-text-input>
+                                </div>
+                                }
+                            </div>
+
+                            <div class="row mb-5">
+                                <div class="col-md-6 mb-3 ">
+                                    <app-validated-text-input [label]="'Propietario Elemento Fallado'"
+                                        [inputType]="'autocompleteCoordinated'" [values]="coordinated"
+                                        [input]="'ownerName'" [field]="eafDetailDto.header?.ownerName"
+                                        (valueChanged)="onCoordinatedSelected('header','ownerName', $event)"></app-validated-text-input>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <app-validated-text-input [label]="'RUT Propietario Elemento Fallado'"
+                                        [input]="'ownerRut'" [inputType]="'text'"
+                                        [field]="eafDetailDto.header?.ownerRut"
+                                        [isDefaultDisabled]="true"></app-validated-text-input>
+                                </div>
+                            </div>
+                            <div class="row ">
+                                <div class="col-md-12 mb-3">
+                                    <app-validated-text-input [label]="'Origen y Causa Desconexión'"
+                                        [input]="'originCauseDescription'"
+                                        [field]="eafDetailDto.header?.originCauseDescription" [inputType]="'textarea'"
+                                        (valueChanged)="onFieldValueChanged('header','originCauseDescription', $event)"></app-validated-text-input>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--FIN Cabecera -->
+
+            <!-- Consumos -->
+            <div class="accordion mb-3" id="formAccordion">
+                <div class="accordion-item" [ngClass]="'is-' + getSectionStatus('CONSUMPTIONS').validationType.level">
+                    <h2 class="accordion-header" id="headingConsumos" data-bs-toggle="tooltip"
+                        [title]="getSectionStatus('CONSUMPTIONS').validationType.description">
+                        <button class="accordion-button d-flex justify-content-between align-items-center" type="button"
+                            data-bs-toggle="collapse" data-bs-target="#collapseConsumos" aria-expanded="true"
+                            aria-controls="collapseConsumos">
+                            <strong>Consumos</strong>
+                        </button>
+                    </h2>
+                    <div id="collapseConsumos" class="accordion-collapse collapse show"
+                        aria-labelledby="headingConsumos">
+                        <div class="accordion-body">
+                            <div class="row">
+                                <div class="col-md-9"></div>
+                                <div class="col-md-3">
+                                    <button *ngIf="getSectionStatus('CONSUMPTIONS').validationType.level == 'danger'"
+                                        class="btn btn-primary mb-2 float-end" (click)="addNewConsumption()">
+                                        <i class="bi bi-plus-circle"></i> Añadir nuevo consumo
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="row mb-4 ">
+                                <div class="col-md-12">
+                                    <div class="alert alert-primary" role="alert">
+                                        Debes seleccionar una subestación e inmediatamente seleccionar su paño.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <p-table [value]="eafDetailDto.consumptions" 
+                                    dataKey="id" 
+                                    [paginator]="false"
+                                    styleClass="p-datatable-striped p-datatable-gridlines">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th style="width: 5rem"></th>  
+                                        <th style="min-width: 250px;">subestación</th>
+                                        <th style="min-width: 180px;">Alimentador</th>
+                                        <th style="min-width: 250px;">Paño</th>
+                                        <th style="min-width: 180px;">Comunas</th>
+                                        <th style="min-width: 180px;">Pérdida Consumo (MW)</th>
+                                        <th style="min-width: 180px;">% Consumo Pre-falla</th>
+                                        <th style="min-width: 180px;">Clientes Afectados</th>
+                                        <th style="min-width: 300px;">Cliente</th>
+                                        <th style="min-width: 150px;">H. Desconexión</th>
+                                        <th style="min-width: 150px;">H. Disponibilización</th>
+                                        <th style="min-width: 150px;">H. Normalización</th>
+                                        <th></th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-consumption let-rowIndex="rowIndex" let-expanded="expanded">
+                                    <tr>
+                                        <td>
+                                            <div *ngIf="consumption.additionalInfoRegulated && consumption.additionalInfoRegulated.length > 0">
+                                                <p-button   type="button" 
+                                                            pRipple [pRowToggler]="consumption" 
+                                                            [text]="true" 
+                                                            [rounded]="true" 
+                                                            [plain]="true"                                                            
+                                                            [icon]="expanded ? 'pi pi-chevron-down pi-lg' : 'pi pi-chevron-right pi-sm'">
+                                                </p-button>
+                                            </div>                                            
+                                            <div class="ml-2" *ngIf="consumption.additionalInfoRegulated && consumption.additionalInfoRegulated.length === 0">
+                                                <i class="bi bi-exclamation-triangle-fill icon-yellow icon-spacing" role="button"
+                                                title="Sin registros asociados" data-bs-toggle="tooltip"></i>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <ng-container
+                                                *ngIf="consumption.substation.errorLevel !== 'success'; else readonlySubstation">
+                                                <p-dropdown [options]="substations" 
+                                                    [(ngModel)]="consumption.substation.value"
+                                                    optionLabel="nombre" 
+                                                    [placeholder]="'Seleccione subestación'"
+                                                    emptyFilterMessage="No se encontraron resultados"
+                                                    emptyMessage="No se encontraron resultados"
+                                                    [filter]="true" 
+                                                    (onChange)="onFieldValueChanged('consumptions','substation', $event.value, consumption.recordNumber)"
+                                                    [attr.title]="consumption.substation?.validationDescription || ''" appendTo="body">
+                                                </p-dropdown>
+                                                <div *ngIf="consumption.substation?.errorLevel !== 'success'" class="form-text" [ngClass]="{
+                                                    'text-danger': consumption.substation?.errorLevel === 'danger',
+                                                    'text-warning': consumption.substation?.errorLevel === 'warning'
+                                                  }">
+                                                  <i [ngClass]="getIconClass(consumption.substation)"></i>
+                                                  {{ consumption.substation?.errorDescription }}
+                                              </div>
+                                            </ng-container>
+                                            <ng-template #readonlySubstation>
+                                                {{ consumption.substation.value.nombre }}
+                                            </ng-template>
+                                        </td>
+                                        <td>
+                                            <ng-container
+                                                *ngIf="consumption.feeder.errorLevel !== 'success'; else readonlyFeeder">
+                                                <div style="margin-top: 10px !important;">
+                                                    <app-validated-text-input [label]="''" [inputType]="'text'"
+                                                        [field]="consumption.feeder" [input]="'feeder'"
+                                                        [recordNumber]="consumption.recordNumber"
+                                                        (valueChanged)="onFieldValueChanged('consumptions','feeder', $event, consumption.recordNumber)">
+                                                    </app-validated-text-input>
+                                                </div>
+                                            </ng-container>
+                                            <ng-template #readonlyFeeder>
+                                                {{ consumption.feeder.value }}
+                                            </ng-template>
+                                        </td>
+                                        <td>
+                                            <ng-container
+                                                *ngIf="consumption.section.errorLevel !== 'success'; else readonlySection">
+                                                <p-dropdown [options]="consumption.sectionList" 
+                                                    [(ngModel)]="consumption.section.value"
+                                                    optionLabel="nombre" 
+                                                    [placeholder]="'Seleccione paño'"
+                                                    (onShow)="onSectionFocus( consumption)"
+                                                    emptyFilterMessage="No se encontraron resultados"
+                                                    emptyMessage="No se encontraron resultados"
+                                                    [filter]="true" 
+                                                    [disabled]="!consumption.substation.value.id" 
+                                                    (onChange)="onFieldValueChanged('consumptions','section', $event.value, consumption.recordNumber)"
+                                                    [attr.title]="consumption.section?.validationDescription || ''" appendTo="body">
+                                                </p-dropdown>
+                                                <div *ngIf="consumption.section?.errorLevel !== 'success'" class="form-text" [ngClass]="{
+                                                    'text-danger': consumption.section?.errorLevel === 'danger',
+                                                    'text-warning': consumption.section?.errorLevel === 'warning'
+                                                  }">
+                                                  <i [ngClass]="getIconClass(consumption.section)"></i>
+                                                  {{ consumption.section?.errorDescription }}
+                                              </div>
+                                            </ng-container>
+                                            <ng-template #readonlySection>
+                                                {{ consumption.section.value.nombre }}
+                                            </ng-template>
+                                        </td>
+                                        <td>
+                                            <ng-container
+                                                *ngIf="consumption.communeConsumptions.errorLevel !== 'success'; else readonlyCommunes">
+                                                <app-validated-text-input [label]="''" [inputType]="'multiselect'"
+                                                    [values]="communes" [input]="'communeConsumptions'"
+                                                    [recordNumber]="consumption.recordNumber"
+                                                    (valueChanged)="onCommunesChange('communeConsumptions', $event, consumption.recordNumber)"
+                                                    [field]="consumption.communeConsumptions">
+                                                </app-validated-text-input>
+                                            </ng-container>
+                                            <ng-template #readonlyCommunes>
+                                                @for (item of consumption.communeConsumptions.value; track $index) {
+                                                <span class="badge bg-secondary">{{ item.communeDescription }}</span>
+                                                }
+                                            </ng-template>
+                                        </td>
+                                        <td>
+                                            <ng-container
+                                                *ngIf="consumption.consumptionLoss.errorLevel !== 'success'; else readonlyConsumptionLoss">
+                                                <div style="margin-top: 10px !important;">
+                                                    <app-validated-text-input [label]="''" [inputType]="'decimal'"
+                                                        [field]="consumption.consumptionLoss"
+                                                        [input]="'consumptionLoss'"
+                                                        [recordNumber]="consumption.recordNumber"
+                                                        (valueChanged)="onFieldValueChanged('consumptions','consumptionLoss', $event, consumption.recordNumber)">
+                                                    </app-validated-text-input>
+                                                </div>
+                                            </ng-container>
+                                            <ng-template #readonlyConsumptionLoss>
+                                                {{ consumption.consumptionLoss.value | replaceDotWithComma }}
+                                            </ng-template>
+                                        </td>
+                                        <td>
+                                            <ng-container
+                                                *ngIf="consumption.preFailureAverageConsumption.errorLevel !== 'success'; else readonlyPreFailureAverageConsumption">
+                                                <div style="margin-top: 10px !important;">
+                                                    <app-validated-text-input [label]="''" [inputType]="'decimal'"
+                                                        [field]="consumption.preFailureAverageConsumption"
+                                                        [input]="'preFailureAverageConsumption'"
+                                                        [recordNumber]="consumption.recordNumber"
+                                                        (valueChanged)="onFieldValueChanged('consumptions','preFailureAverageConsumption', $event, consumption.recordNumber)">
+                                                    </app-validated-text-input>
+                                                </div>
+                                            </ng-container>
+                                            <ng-template #readonlyPreFailureAverageConsumption>
+                                                {{ consumption.preFailureAverageConsumption.value | replaceDotWithComma }}
+                                            </ng-template>
+                                        </td>
+                                        <td>
+                                            <ng-container
+                                                *ngIf="consumption.numberOfCustomers.errorLevel !== 'success'; else readonlyNumberOfCustomers">
+                                                <div style="margin-top: 10px !important;">
+                                                    <app-validated-text-input [label]="''" [inputType]="'number'"
+                                                        [field]="consumption.numberOfCustomers"
+                                                        [input]="'numberOfCustomers'"
+                                                        [recordNumber]="consumption.recordNumber"
+                                                        (valueChanged)="onFieldValueChanged('consumptions','numberOfCustomers', $event, consumption.recordNumber)">
+                                                    </app-validated-text-input>
+                                                </div>
+                                            </ng-container>
+                                            <ng-template #readonlyNumberOfCustomers>
+                                                {{ consumption.numberOfCustomers.value }}
+                                            </ng-template>
+                                        </td>
+                                        <td>
+                                            <ng-container
+                                                *ngIf="consumption.company.errorLevel !== 'success'; else readonlyCompany">
+
+                                                <p-dropdown [options]="companies" 
+                                                    [(ngModel)]="consumption.company.value"
+                                                    optionLabel="nombre" 
+                                                    [placeholder]="'Seleccione empresa'"
+                                                    emptyFilterMessage="No se encontraron resultados"
+                                                    emptyMessage="No se encontraron resultados"
+                                                    [filter]="true" 
+                                                    (onChange)="onFieldValueChanged('consumptions','company', $event.value, consumption.recordNumber)"
+                                                    [attr.title]="consumption.company?.validationDescription || ''" appendTo="body">
+                                                </p-dropdown>
+                                                <div *ngIf="consumption.company?.errorLevel !== 'success'" class="form-text" [ngClass]="{
+                                                    'text-danger': consumption.company?.errorLevel === 'danger',
+                                                    'text-warning': consumption.company?.errorLevel === 'warning'
+                                                  }">
+                                                  <i [ngClass]="getIconClass(consumption.company)"></i>
+                                                  {{ consumption.company?.errorDescription }}
+                                              </div>
+                                            </ng-container>
+                                            <ng-template #readonlyCompany>
+                                                {{ consumption.company.value.nombre }}
+                                            </ng-template>
+                                        </td>
+                                        <td>
+                                            <ng-container
+                                                *ngIf="consumption.disconnectionDatetime.errorLevel !== 'success'; else readonlyDisconnectionDatetime">
+                                                <div style="margin-top: 10px !important;">
+                                                    <app-validated-text-input [label]="''" [inputType]="'datetime'"
+                                                        [field]="consumption.disconnectionDatetime"
+                                                        [input]="'disconnectionDatetime'"
+                                                        [maxDate]="disconnectionMaxDate(consumption)"
+                                                        [recordNumber]="consumption.recordNumber"
+                                                        (valueChanged)="onFieldValueChanged('consumptions','disconnectionDatetime', $event, consumption.recordNumber)">
+                                                    </app-validated-text-input>
+                                                </div>
+                                            </ng-container>
+                                            <ng-template #readonlyDisconnectionDatetime>
+                                                {{ consumption.disconnectionDatetime.value | date: 'dd-MM-yyyy HH:mm' }}
+                                            </ng-template>
+                                        </td>
+                                        <td>
+                                            <ng-container
+                                                *ngIf="consumption.availabilityDatetime.errorLevel !== 'success'; else readonlyAvailabilityDatetime">
+                                                <div style="margin-top: 10px !important;">
+                                                    <app-validated-text-input [label]="''" [inputType]="'datetime'"
+                                                        [field]="consumption.availabilityDatetime"
+                                                        [input]="'availabilityDatetime'"
+                                                        [minDate]="consumption.disconnectionDatetime.value"
+                                                        [maxDate]="maxDate"
+                                                        [isDefaultDisabled]="consumption.disconnectionDatetime.value === ''"
+                                                        [recordNumber]="consumption.recordNumber"
+                                                        (valueChanged)="onFieldValueChanged('consumptions','availabilityDatetime', $event, consumption.recordNumber)">
+                                                    </app-validated-text-input>
+                                                </div>
+                                            </ng-container>
+                                            <ng-template #readonlyAvailabilityDatetime>
+                                                {{ consumption.availabilityDatetime.value | date: 'dd-MM-yyyy HH:mm' }}
+                                            </ng-template>
+                                        </td>
+                                        <td>
+                                            <ng-container
+                                                *ngIf="consumption.normalizationDatetime.errorLevel !== 'success'; else readonlyNormalizationDatetime">
+                                                <div style="margin-top: 10px !important;">
+                                                    <app-validated-text-input [label]="''" [inputType]="'datetime'"
+                                                        [field]="consumption.normalizationDatetime"
+                                                        [input]="'normalizationDatetime'"
+                                                        [minDate]="consumption.disconnectionDatetime.value"
+                                                        [maxDate]="maxDate"
+                                                        [isDefaultDisabled]="consumption.disconnectionDatetime.value === ''"
+                                                        [recordNumber]="consumption.recordNumber"
+                                                        (valueChanged)="onFieldValueChanged('consumptions','normalizationDatetime', $event, consumption.recordNumber)">
+                                                    </app-validated-text-input>
+                                                </div>
+                                            </ng-container>
+                                            <ng-template #readonlyNormalizationDatetime>
+                                                {{ consumption.normalizationDatetime.value | date: 'dd-MM-yyyy HH:mm' }}
+                                            </ng-template>
+                                        </td>
+                                        <td>
+                                            <button *ngIf="!consumption.id" class="btn btn-danger btn-sm"
+                                                (click)="removeConsumption(rowIndex)">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="rowexpansion" let-consumption>                                    
+                                    <tr>
+                                        <td colspan="11" class="background-minimalist">
+                                            <div class="triangle-consumption"></div>
+                                            <div class="minimalist-box">
+                                                <p-table [value]="consumption.additionalInfoRegulated" 
+                                                        dataKey="id"
+                                                        scrollable="true"
+                                                        styleClass="custom-table-info"
+                                                        scrollable="true"
+                                                        [scrollDirection]="'horizontal'">
+                                                    <ng-template pTemplate="header">
+                                                        <tr>
+                                                            <th class="text-center" nowrap>ID Barra </th>
+                                                            <th class="text-center" nowrap>ID Paño </th>
+                                                            <th class="text-left">Alimentador </th>
+                                                            <th class="text-center">P&eacute;rdida de consumo<br> [MW] </th>
+                                                            <th class="text-center">Hora de desconexi&oacute;n<br> </th>
+                                                            <th class="text-center">Hora de normalización<br> equivalente </th>
+                                                            <th class="text-left">Comunas afectadas </th>
+                                                            <th class="text-center">Sistema de Tx Zonal </th>
+                                                            <th class="text-center">Energ&iacute;a interrumpida<br> según Artículo 3-12 NT [MWh]</th>
+                                                            <th class="text-center">Cantidad clientes afectados sin considerar demoras en la recuperaci&oacute;n de servicio</th>
+                                                            <th class="text-center">Energ&iacute;a interrumpida seg&uacute;n Articulo 2-5 NT (MWh)</th>
+                                                            <th class="text-center">Cantidad clientes afectados considerando demoras en la recuperaci&oacute;n de servicio</th>
+                                                            <th class="text-center">Cpph equivalente</th>                                                        </tr>
+                                                    </ng-template>
+                                                    <ng-template pTemplate="body" let-info>
+                                                        <tr>
+                                                            <td class="text-center">{{ info.busbarInfotecnicaId }}</td>
+                                                            <td class="text-center">{{ info.sectionInfotecnicaId }}</td>
+                                                            <td>{{ info.feeder }}</td>
+                                                            <td class="text-center">{{ info.consumptionLoss | number: '1.2-2' }}</td>
+                                                            <td class="text-center">{{ formatDate(info.disconnectionTime) }}</td>
+                                                            <td class="text-center">{{ formatDate(info.equivNormalizationTime) }}</td>
+                                                            <td>{{ info.communes }}</td>
+                                                            <td class="text-center">{{ info.zonalTXSystem }}</td>
+                                                            <td class="text-center">{{ info.intEnergy312Mwh }}</td>
+                                                            <td class="text-center">{{ info.affectedCustNoDelay }}</td>
+                                                            <td class="text-center">{{ info.intEnergy25Mwh }}</td>
+                                                            <td class="text-center">{{ info.affectedCustWithDelay }}</td>
+                                                            <td class="text-center">{{ info.equivCpphMw }}</td>
+                                                        </tr>
+                                                    </ng-template>
+                                                    <ng-template pTemplate="emptymessage">
+                                                        <tr>
+                                                            <td colspan="6">Este registro no cuenta con archivos válidos.</td>
+                                                        </tr>
+                                                    </ng-template>
+                                                </p-table>
+                                            </div>
+                                            
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--FIN Consumos -->
+
+
+            <!-- EDAC -->
+            <div class="accordion mb-3" id="formAccordion">
+                <div class="accordion-item" [ngClass]="'is-' + eafDetailDto.header?.edacStatus?.errorLevel">
+                    <h2 class="accordion-header" id="headingEDAC" data-bs-toggle="tooltip"
+                        [title]="getSectionStatus('EDAC').validationType.description">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseEDAC" aria-expanded="true" aria-controls="collapseEDAC">
+                            <strong>EDAC</strong>
+                        </button>
+                    </h2>
+                    <div id="collapseEDAC" class="accordion-collapse collapse show" aria-labelledby="headingEDAC">
+                        <div class="accordion-body">
+                            <div class="row mb-5">
+                                <div class="form-check form-switch mb-3">
+                                    <app-validated-text-input [label]="'Considera EDAC'"
+                                        [field]="eafDetailDto.header?.edacStatus" [inputType]="'checkbox'"
+                                        [input]="'edacStatus'"
+                                        (valueChanged)="onFieldValueChanged('header','edacStatus', $event)"></app-validated-text-input>
+                                </div>
+                            </div>
+
+                            <div class="row mb-5">
+                                <div class="mb-3">
+                                    <app-validated-text-input [label]="'Comentario'"
+                                        [field]="eafDetailDto.header?.edacDescription" [inputType]="'textarea'"
+                                        [input]="'edacDescription'"
+                                        (valueChanged)="onFieldValueChanged('header','edacDescription', $event)"></app-validated-text-input>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- FIN EDAC -->
+
+            <!-- Anexos -->
+            <div class="accordion mb-3" id="formAccordion">
+                <div class="accordion-item" [ngClass]="'is-' + getSectionStatus('ATTACHMENT').validationType.level">
+                    <h2 class="accordion-header d-flex align-items-center" id="headingAnexos" data-bs-toggle="tooltip"
+                        [title]="getSectionStatus('ATTACHMENT').validationType.description">
+                        <button class="accordion-button flex-grow-1" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseAnexos" aria-expanded="true" aria-controls="collapseAnexos">
+                            <strong>Anexos N°5</strong>
+                        </button>
+                    </h2>
+                    <div id="collapseAnexos" class="accordion-collapse collapse show" aria-labelledby="headingAnexos">
+                        <div class="accordion-body">
+                            <div class="row">
+                                <div class="col-md-9"></div>
+                                <div class="col-md-3">
+                                    <button *ngIf="getSectionStatus('ATTACHMENT').validationType.level != 'success'"
+                                        class="btn btn-primary mb-2 float-end" (click)="addNewAttachment()">
+                                        <i class="bi bi-plus-circle"></i> Añadir nuevo anexo
+                                    </button>
+                                </div>
+                            </div>
+
+                            <p-table [value]="eafDetailDto.attachments" 
+                                    dataKey="uuid"
+                                    [paginator]="false"
+                                    styleClass="p-datatable-striped p-datatable-gridlines">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th style="width: 5rem"></th>
+                                        <th style="min-width: 250px;">Código Neomante</th>
+                                        <th style="min-width: 250px;">Nombre Empresa</th>
+                                        <th style="min-width: 250px;">ID Empresa</th>
+                                        <th style="min-width: 250px;">Subestación</th>
+                                        <th></th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-attachment let-rowIndex="rowIndex" let-expanded="expanded">
+                                    <tr>
+                                        <td>
+                                            <div *ngIf="attachment.additionalInfos && attachment.additionalInfos.length > 0">
+                                                <p-button   type="button" 
+                                                            pRipple [pRowToggler]="attachment" 
+                                                            [text]="true" 
+                                                            [rounded]="true" 
+                                                            [plain]="true"
+                                                            [icon]="(attachment.additionalInfos && attachment.additionalInfos.length > 0) ? (expanded ? 'pi pi-chevron-down pi-lg' : 'pi pi-chevron-right pi-sm') : 'pi pi-exclamation-triangle pi-lg'"/>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <ng-container
+                                                *ngIf="attachment.codeNeomante.errorLevel !== 'success'; else readonlyCodeNeomante">
+                                                <div style="margin-top: 10px !important;">
+                                                    <app-validated-text-input [label]="''" [inputType]="'number'"
+                                                        [field]="attachment.codeNeomante" [input]="'codeNeomante'"
+                                                        [recordNumber]="attachment.recordNumber"
+                                                        (valueChanged)="onFieldValueChanged('attachments','codeNeomante', $event, attachment.recordNumber)">
+                                                    </app-validated-text-input>
+                                                </div>
+                                            </ng-container>
+                                            <ng-template #readonlyCodeNeomante>{{ attachment.codeNeomante.value }}</ng-template>
+                                        </td>
+                                        <td>
+                                            <ng-container
+                                                *ngIf="attachment.company.errorLevel !== 'success'; else readonlyCompany">
+                                                <p-dropdown [options]="regulatedCompanies" 
+                                                    [(ngModel)]="attachment.company.value"
+                                                    optionLabel="nombre" 
+                                                    [placeholder]="'Seleccione empresa'"
+                                                    emptyFilterMessage="No se encontraron resultados"
+                                                    emptyMessage="No se encontraron resultados"
+                                                    [filter]="true" 
+                                                    (onChange)="onFieldValueChanged('attachments','company', $event.value, attachment.recordNumber)"
+                                                    [attr.title]="attachment.company?.validationDescription || ''" appendTo="body">
+                                                </p-dropdown>
+                                                <div *ngIf="attachment.company?.errorLevel !== 'success'" class="form-text" [ngClass]="{
+                                                    'text-danger': attachment.company?.errorLevel === 'danger',
+                                                    'text-warning': attachment.company?.errorLevel === 'warning'
+                                                  }">
+                                                  <i [ngClass]="getIconClass(attachment.company)"></i>
+                                                  {{ attachment.company?.errorDescription }}
+                                              </div>
+                                            </ng-container>
+                                            <ng-template #readonlyCompany>
+                                                {{ attachment.company.value.nombre }}
+                                            </ng-template>
+                                        </td>
+                                        <td class="file-info">{{ attachment.company.value.id }}</td>
+                                        <td>
+                                            <ng-container
+                                                *ngIf="attachment.substation.errorLevel !== 'success'; else readonlySubstation">
+                                                <p-dropdown [options]="substations" 
+                                                    [(ngModel)]="attachment.substation.value"
+                                                    optionLabel="nombre" 
+                                                    [placeholder]="'Seleccione subestación'"
+                                                    emptyFilterMessage="No se encontraron resultados"
+                                                    emptyMessage="No se encontraron resultados"
+                                                    [filter]="true" 
+                                                    (onChange)="onFieldValueChanged('consumptions','substation', $event.value, attachment.recordNumber)"
+                                                    [attr.title]="attachment.substation?.validationDescription || ''" appendTo="body">
+                                                </p-dropdown>
+                                                <div *ngIf="attachment.substation?.errorLevel !== 'success'" class="form-text" [ngClass]="{
+                                                    'text-danger': attachment.substation?.errorLevel === 'danger',
+                                                    'text-warning': attachment.substation?.errorLevel === 'warning'
+                                                  }">
+                                                  <i [ngClass]="getIconClass(attachment.substation)"></i>
+                                                  {{ attachment.substation?.errorDescription }}
+                                              </div>
+                                            </ng-container>
+                                            <ng-template #readonlySubstation>
+                                                {{ attachment.substation.value.nombre }}
+                                            </ng-template>
+                                        </td>
+                                        <td>
+                                            <button *ngIf="!attachment.uuid" class="btn btn-danger btn-sm"
+                                                (click)="removeAttachment(rowIndex)">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="rowexpansion" let-attachment>
+                                    <tr>
+                                        <td colspan="5" class="background-minimalist">
+                                            <div class="triangle-additionInfo"></div>
+                                            <div class="minimalist-box">
+                                                <p-table [value]="attachment.additionalInfos" 
+                                                        dataKey="id"
+                                                        styleClass="custom-table-info">
+                                                    <ng-template pTemplate="header">
+                                                        <tr>
+                                                            <th class="text-center">Archivos </th>
+                                                            <th colspan="4" class="text-center">Regulado </th>
+                                                            <th colspan="2" class="text-center">Libre DX </th>
+                                                            <th style="width: 4rem"></th>
+                                                        </tr>
+                                                    </ng-template>
+                                                    <ng-template pTemplate="body" let-additionalInfo>
+                                                        <tr>
+                                                            <td class="file-info">{{ additionalInfo.name }}</td>
+                                                            <td class="validation-info">
+                                                                <i [ngClass]="{'bi bi-x-circle-fill icon-red icon-spacing icon-style': additionalInfo.regulatedProcessStatusId !== 'PE00',
+                                                                    'bi bi-check-circle-fill icon-success icon-spacing': additionalInfo.regulatedProcessStatusId === 'PE00'}"
+                                                                    role="button" data-bs-toggle="tooltip"
+                                                                    [title]="additionalInfo.regulatedProcessStatusId !== 'PE00' ? 'Validación con errores' : 'Validación sin errores'">
+                                                                </i>
+                                                            </td>
+                                                            <td class="view-error-info">
+                                                                <i *ngIf="additionalInfo.regulatedProcessStatusId!=='PE00'" class="bi bi-eye icon-blue icon-spacing icon-style" role="button"
+                                                                title="Ver errores de validación" (click)="openModal(additionalInfo.id, 'Errores de Validación', 'validation')" data-bs-toggle="tooltip"></i>                                                    
+                                                            </td>
+                                                            <td class="association-info">
+                                                                <i [ngClass]="{'bi bi-exclamation-triangle-fill icon-yellow icon-spacing icon-style': additionalInfo.allAssociated === 0,
+                                                                    'bi bi-check-circle-fill icon-success icon-spacing': additionalInfo.allAssociated === 1}"
+                                                                    role="button" data-bs-toggle="tooltip"
+                                                                    [title]="additionalInfo.allAssociated === 0 ? 'Asociación sin consumos' : 'Asociación con consumos'">
+                                                                </i>
+                                                            <td class="view-error-info">
+                                                                <i *ngIf="additionalInfo.allAssociated===0" class="bi bi-eye icon-blue icon-spacing icon-style" role="button"
+                                                                title="Ver registros sin asociación de consumo" (click)="openModal(additionalInfo.id, 'Registros sin asociación', 'association')" data-bs-toggle="tooltip"></i>
+                                                            </td>                                                
+                                                            <td class="dx-info">
+                                                                <i *ngIf="additionalInfo.freeDXProcessStatusId!=='PE00'" class="bi bi-x-circle-fill icon-red icon-spacing icon-style" role="button"
+                                                                title="" data-bs-toggle="tooltip"></i>
+                                                                &nbsp;&nbsp;
+                                                                <i *ngIf="additionalInfo.freeDXProcessStatusId=='warning'" class="bi bi-exclamation-triangle-fill icon-yellow icon-spacing icon-style" role="button"
+                                                                title="" data-bs-toggle="tooltip"></i>                                                    
+                                                                <i *ngIf="additionalInfo.freeDXProcessStatusId==='PE00'" class="bi bi-check-circle-fill icon-success icon-spacing icon-style" role="button"
+                                                                title="" data-bs-toggle="tooltip"></i>
+                                                            </td>
+                                                            <td class="view-error-info">
+                                                                <i *ngIf="additionalInfo.freeDXProcessStatusId!=='PE00'" class="bi bi-eye icon-blue icon-spacing icon-style" role="button"
+                                                                title="Ver detalle" (click)="openModal(additionalInfo.id, 'Detalle', 'dx')" data-bs-toggle="tooltip"></i>
+                                                            </td>
+                                                            <td class="text-center">
+                                                                <cen-download-file  [downloadName]="additionalInfo.name" 
+                                                                                    [downloadPath]="additionalInfo.filePath"
+                                                                                    downloadButton="none"
+                                                                                    downloadExtension="xlsx">
+                                                                </cen-download-file>
+                                                            </td>
+                                                        </tr>
+                                                    </ng-template>
+                                                    <ng-template pTemplate="emptymessage">
+                                                        <tr>
+                                                            <td colspan="6">Este registro no cuenta con archivos válidos.</td>
+                                                        </tr>
+                                                    </ng-template>
+                                                </p-table>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </ng-template>            
+                            </p-table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- FIN Anexos -->
+
+            <!-- Botones al final de la página -->
+            <div class="bg-white border-top py-3">
+                <div class="container d-flex justify-content-end">
+                    <button class="btn btn-secondary me-2" (click)="onBack()">Volver</button>
+                    <button class="btn btn-primary" [disabled]="!canSave()" (click)="confirmSave()">Guardar</button>
+                </div>
+            </div>
+        </div>
+        <!-- FIN Botones al final de la página -->
+
+        <div class="card flex justify-content-center gap-2">
+            <p-toast position="bottom-right" />
+            <p-confirmDialog />
+        </div>
+
+    </div>
+</div>
+
+<p-dialog [(visible)]="isModalOpen" [modal]="true" [closable]="false" [header]="titleModal" [style]="{width: '60vw'}">
+    <div>
+        <p-table [value]="additionalInfoLogs"                 
+                styleClass="p-datatable-striped p-datatable-gridlines custom-table-errors">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="width: 10%" class="text-center">#</th>
+                    <th style="width: 90%">Descripción</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-error let-rowIndex="rowIndex">
+                <tr>
+                    <td class="text-center">{{rowIndex+1}}.-</td>
+                    <td>{{ error.errorDescription }}</td>
+                </tr>
+            </ng-template>
+        </p-table>        
+    </div>
+
+    <div class="text-end mt-4">
+        <button type="button" class="btn btn-secondary me-2" (click)="closeModal()">Cerrar</button>        
+    </div>
+</p-dialog>
