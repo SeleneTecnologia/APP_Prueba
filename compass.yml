@@ -15,8 +15,8 @@ links:
     url: 'https://coordinador-team.atlassian.net/browse/PROYEC'
 relationships: {}
 labels:
-  - 'source:github'
-  - synced-with-jsm
+  - 'demo'
+  - test
 customFields: null
 
 # Obtén más información sobre cómo dar formato a compass.yml:
