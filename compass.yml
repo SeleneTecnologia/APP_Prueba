@@ -5,7 +5,7 @@ configVersion: 1
 typeId: SERVICE
 ownerId: 'ari:cloud:identity::team/585a6752-90ff-442d-8eda-fb43faacb44f'
 fields:
-  tier: 4
+  tier: 2
 links:
   - name: null
     type: REPOSITORY
